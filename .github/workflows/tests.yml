@@ -1,0 +1,37 @@
+name: tests
+
+# 每次 push / PR 自动跑测试。
+# 目的：README 上写的「9 项测试」不是一句要相信作者的话，而是每次都由机器重跑。
+
+# 踩过的坑（别改回去）：
+# 1) Windows runner 默认用 PowerShell 执行命令。带中文 + 引号的命令会被解析坏，
+#    所以 run: 里只写纯 ASCII，中文只出现在注释和步骤名里。
+# 2) Windows 控制台不是 UTF-8，Python 打印中文会炸，所以固定 PYTHONIOENCODING。
+# 3) 测试目录里需要 sys.path 能找到根目录的模块，所以从仓库根跑（见 tests/ 里的注释）。
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  tests:
+    name: py ${{ matrix.python-version }} on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python-version: ["3.11", "3.13"]
+    env:
+      PYTHONIOENCODING: utf-8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install deps
+        run: python -m pip install -r requirements.txt
+
+      - name: Run tests
+        run: python -m unittest discover -s tests
