@@ -6,6 +6,22 @@
 
 ---
 
+## 三步跑起来（不需要联网、不需要 key；需要本机装有 Chrome 或 Edge）
+
+```bash
+git clone https://github.com/gangrenboqe/pdf-delivery-audit.git && cd pdf-delivery-audit
+pip install -r requirements.txt          # 唯一依赖 pypdf（读 PDF 页数与文字层）
+python pdf_delivery_audit.py samples/resume_sample.html --must-have 张三 --must-have GitHub
+# → 真实打印引擎导出 PDF 并体检：页数 / 底部余量 / 可提取字符 / 关键字段，结论"可以交付"
+#   真实运行输出见 docs/audit_run.txt，体检产物样例见 docs/resume_sample_output.pdf
+```
+
+> `samples/resume_sample.html` 是**完全虚构的合成简历**（无任何真实个人信息）。
+> 退出码 0 = 通过、1 = 未通过——可以直接当交付门禁或 CI 关卡。
+> 陌生人复验记录见 [docs/STRANGER_REVIEW.md](docs/STRANGER_REVIEW.md)。
+
+---
+
 ## 它解决什么
 
 我交付过一份 PDF 投递件，页面上文字和排版**看着完全正常**，
