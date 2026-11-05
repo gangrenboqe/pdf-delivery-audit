@@ -1,5 +1,7 @@
 # pdf-delivery-audit —— 交付前的 PDF 体检器
 
+[![tests](https://github.com/gangrenboqe/pdf-delivery-audit/actions/workflows/test.yml/badge.svg)](https://github.com/gangrenboqe/pdf-delivery-audit/actions/workflows/test.yml)
+
 > 一句话：**把「看着是对的」变成「机器验过是对的」。**
 > 任何要交给第三方系统处理的东西（简历 PDF、导出件、上传件），
 > 导出完自动体检：几页、还剩多少余量、**机器能不能读出字**。
@@ -112,6 +114,8 @@ python pdf_delivery_audit.py doc.html --min-chars 500 --target-pages 2
 
 只有一个：**`pypdf`**（读 PDF 页数与文字层）。
 打印用的是本机已装的 Chrome / Edge，不需要额外下载。
+
+> 为什么其它工具零依赖、这里有一个破例：PDF 的页数与文字层要解析压缩流和字体表，标准库做不到——这是唯一的破例。
 
 ---
 
