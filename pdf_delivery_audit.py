@@ -60,7 +60,7 @@ CANDIDATE_PATHS = [
 ]
 
 
-def find_browser():
+def find_browser() -> str:
     """按优先级找：环境变量 → PATH → 常见安装路径。找不到就明确报错。"""
     env_path = os.environ.get("CHROME_PATH")
     if env_path and os.path.exists(env_path):
@@ -81,7 +81,8 @@ def find_browser():
 # --------------------------------------------------------------------------
 # 2. 导出与测量
 # --------------------------------------------------------------------------
-def build_with_bottom_margin(html, bottom_mm, side_mm=11, top_mm=11):
+def build_with_bottom_margin(html: str, bottom_mm: int,
+                             side_mm: int = 11, top_mm: int = 11) -> str:
     """把 @page { margin: ... } 的下边距改成指定毫米数，用于二分试探。"""
     def rep(match):
         css = match.group(0)
@@ -93,7 +94,7 @@ def build_with_bottom_margin(html, bottom_mm, side_mm=11, top_mm=11):
     return re.sub(r"@page\s*\{[^}]*\}", rep, html, count=1)
 
 
-def export_pdf(browser, html_path, out_path, timeout=120):
+def export_pdf(browser: str, html_path: str, out_path: str, timeout: int = 120) -> str:
     url = "file:///" + urllib.parse.quote(os.path.abspath(html_path).replace("\\", "/"))
     if os.path.exists(out_path):
         os.remove(out_path)
@@ -107,7 +108,7 @@ def export_pdf(browser, html_path, out_path, timeout=120):
     return out_path
 
 
-def count_pages(browser, html_path, bottom_mm, timeout=120):
+def count_pages(browser: str, html_path: str, bottom_mm: int, timeout: int = 120) -> int:
     """用指定下边距导出一次，只看页数。"""
     html = open(html_path, encoding="utf-8").read()
     tmp_html = html_path + ".__probe.html"
@@ -122,7 +123,8 @@ def count_pages(browser, html_path, bottom_mm, timeout=120):
                 os.remove(f)
 
 
-def binary_search_slack(browser, html_path, base_mm, hi_mm, target_pages, timeout=120):
+def binary_search_slack(browser: str, html_path: str, base_mm: int, hi_mm: int,
+                        target_pages: int, timeout: int = 120) -> tuple[int, int]:
     """
     二分查找：在「不超出目标页数」的前提下，底部最多还能留多少 mm。
     返回 (可容纳的最大下边距, 余量 mm)
@@ -137,7 +139,7 @@ def binary_search_slack(browser, html_path, base_mm, hi_mm, target_pages, timeou
     return lo, lo - base_mm
 
 
-def extract_text(pdf_path):
+def extract_text(pdf_path: str) -> tuple[int, str]:
     reader = pypdf.PdfReader(pdf_path)
     text = "\n".join((page.extract_text() or "") for page in reader.pages)
     return len(reader.pages), text
@@ -146,7 +148,7 @@ def extract_text(pdf_path):
 # --------------------------------------------------------------------------
 # 3. 主流程
 # --------------------------------------------------------------------------
-def main():
+def main() -> int:
     ap = argparse.ArgumentParser(
         description="交付前的 PDF 体检：页数 + 底部余量 + 机器可读性 + 关键字段"
     )

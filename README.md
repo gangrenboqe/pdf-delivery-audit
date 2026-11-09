@@ -130,6 +130,17 @@ python pdf_delivery_audit.py doc.html --min-chars 500 --target-pages 2
 
 ---
 
+### 五分钟复现（从 clone 到看到效果）
+
+```bash
+git clone https://github.com/gangrenboqe/pdf-delivery-audit.git && cd pdf-delivery-audit
+pip install -r requirements.txt            # 唯一依赖 pypdf；本机需装有 Chrome/Edge
+python -m unittest discover -s tests       # 11 项（其中 2 项集成测试会真调浏览器无头导出）
+python -c "open('sample.html','w',encoding='utf-8').write('<style>@page{margin:11mm}</style><body><h1>样例</h1><p>'+('占位正文。'*200)+'</p></body>')"
+python pdf_delivery_audit.py sample.html   # → 体检报告：页数 / 底部余量 / 可提取字符 / 结论
+```
+（本机 Chrome + Python 3.11 实测：sample.html → 1 页、余量 79mm、可提取字符 1025、结论「可以交付」、退出码 0。）
+
 ## 已知边界（如实写）
 
 - 只验证**本机**打印效果。不同浏览器 / 不同版本打印结果会有差异，
