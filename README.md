@@ -147,3 +147,9 @@ python pdf_delivery_audit.py sample.html   # → 体检报告：页数 / 底部�
   换环境请重跑（这也是为什么余量阈值设成 8mm 而不是 0）。
 - 二分每次都要真的导出一次 PDF，页数多时会慢（每次约 1-2 秒，7 次左右收敛）。
 - 不做内容校对，只做结构与可读性体检。
+
+## 许可证
+
+自 2026-11-13 起的版本适用 [PolyForm Noncommercial License 1.0.0](https://polyformproject.org/licenses/noncommercial/1.0.0)：可自由用于个人学习、研究、试验与非商业用途，**不得用于商业目的**。此前发布的版本适用 MIT。
+
+Required Notice: Copyright 2026 谢一竹 (https://github.com/gangrenboqe)
